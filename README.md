@@ -118,4 +118,4 @@ The quote algorithm computes the best count for each seat total and records the 
 
 ## AI assistance
 
-I used Codex to plan the project, scaffold and implement the React frontend and FastAPI backend, and draft the two core algorithms: iterative depth-first search for rewatch planning and dynamic programming for minimum-bundle quotes. Codex also wrote and ran the automated tests, checked the app in Edge, verified Docker Compose and SQLite persistence, and helped draft the documentation and diagrams.
+I used Codex to plan the project, scaffold and implement the React frontend and FastAPI backend.
