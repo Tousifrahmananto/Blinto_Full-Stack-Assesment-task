@@ -1,4 +1,4 @@
-from sqlalchemy import CheckConstraint, String, false
+from sqlalchemy import CheckConstraint, ForeignKey, String, false
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -15,3 +15,10 @@ class Movie(Base):
     release_year: Mapped[int]
     runtime_minutes: Mapped[int]
     watched: Mapped[bool] = mapped_column(server_default=false())
+
+
+class MoviePrerequisite(Base):
+    __tablename__ = "movie_prerequisites"
+
+    movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"), primary_key=True)
+    prerequisite_id: Mapped[int] = mapped_column(ForeignKey("movies.id"), primary_key=True)
