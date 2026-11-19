@@ -1,6 +1,16 @@
 # Doomsday Ready
 
-A full-stack MCU rewatch planner and watch-party quote tool. The current milestone includes a movie list in React and movie management, rewatch planning, and cinema booking quotes in the API.
+A full-stack MCU rewatch planner and watch-party quote tool. Add movies and prerequisites, build a rewatch plan, and calculate the seat bundles your group needs.
+
+## Run with Docker
+
+With Docker running, start the app from the repository root:
+
+~~~sh
+docker compose up --build
+~~~
+
+Open http://127.0.0.1:4173. Set the DOOMSDAY_PORT environment variable before starting Compose if that port is in use. Nginx serves the built React site and forwards /api requests to FastAPI. The backend stores SQLite in the sqlite-data named volume, so records survive normal restarts and docker compose down. Run docker compose down to stop the app.
 
 ## Run locally
 
@@ -23,9 +33,61 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:5173 for the app or http://127.0.0.1:8000/docs for the API. A fresh database starts with an empty movie list. Vite forwards local /api requests to FastAPI.
+Open http://localhost:5173 for the app or http://127.0.0.1:8000/docs for the API. A fresh database starts empty. Add movies in Movies and cinemas in Booking, then use Rewatch Plan or request a booking quote. Vite forwards local /api requests to FastAPI.
 
 From backend, run `.\.venv\Scripts\python.exe -m pytest`. From frontend, run `npm run build`.
+
+## Try the app
+
+1. In **Movies**, add Iron Man (2008, 126 minutes) and The Avengers (2012, 143 minutes). Set Iron Man as a prerequisite of The Avengers.
+2. In **Rewatch Plan**, select The Avengers. The plan lists Iron Man and shows 126 minutes remaining. Mark Iron Man watched in **Movies**, then generate the plan again to see the remaining time drop to zero.
+3. In **Booking**, add a cinema with bundle sizes 1, 3, 4. Quote six seats. The result is two 3-seat bundles.
+
+## Project structure
+
+~~~mermaid
+flowchart LR
+    Browser["Browser<br/>HTML page + React views"]
+    API["FastAPI<br/>Controllers"]
+    Services["Python services<br/>Rewatch and booking algorithms"]
+    Database[("SQLite")]
+    Browser <-->|"HTTP / JSON"| API
+    API <--> Services
+    Services <--> Database
+~~~
+
+The browser starts with frontend/index.html, which supplies the document and the root element. React renders the screens inside that element from JSX in frontend/src. CSS controls the appearance. FastAPI controllers handle requests, and the Python services apply the rules and talk to SQLite.
+
+## Data model
+
+~~~mermaid
+erDiagram
+    MOVIES ||--o{ MOVIE_PREREQUISITES : "movie"
+    MOVIES ||--o{ MOVIE_PREREQUISITES : "required movie"
+    CINEMAS ||--o{ CINEMA_BUNDLE_SIZES : "offers"
+
+    MOVIES {
+        int id PK
+        string title UK
+        int release_year
+        int runtime_minutes
+        bool watched
+    }
+    MOVIE_PREREQUISITES {
+        int movie_id PK, FK
+        int prerequisite_id PK, FK
+    }
+    CINEMAS {
+        int id PK
+        string name UK
+    }
+    CINEMA_BUNDLE_SIZES {
+        int cinema_id PK, FK
+        int size PK
+    }
+~~~
+
+Each prerequisite row links a movie to another movie that must be watched first. The pair of IDs is unique. Each cinema has one row per offered bundle size. Rewatch plans and booking quotes are calculated on request from these records.
 
 ## Movie API
 
