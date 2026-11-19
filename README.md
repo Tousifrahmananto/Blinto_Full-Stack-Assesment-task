@@ -2,21 +2,27 @@
 
 A full-stack MCU rewatch planner and watch-party quote tool. Add movies and prerequisites, build a rewatch plan, and calculate the seat bundles your group needs.
 
-## Run with Docker
+## Run the app
 
-With Docker running, start the app from the repository root:
+Clone this repository and open the repository folder in a terminal. Use Docker Compose to start both services together or run them in separate terminals for development.
+
+### With Docker Compose
+
+Start Docker. Run this command from the repository root.
 
 ~~~sh
 docker compose up --build
 ~~~
 
-Open http://127.0.0.1:4173. Set the DOOMSDAY_PORT environment variable before starting Compose if that port is in use. Nginx serves the built React site and forwards /api requests to FastAPI. The backend stores SQLite in the sqlite-data named volume, so records survive normal restarts and docker compose down. Run docker compose down to stop the app.
+Once both services are running, open http://127.0.0.1:4173. If port 4173 is in use, set `DOOMSDAY_PORT` to an available port before starting Compose and open the app on that port.
 
-## Run locally
+Nginx serves the React app and forwards `/api` requests to FastAPI. The backend stores SQLite data in the `sqlite-data` volume. Your records survive normal restarts and `docker compose down`. Run `docker compose down` from the repository root to stop the app.
 
-Requires Python 3.11 and Node 24 LTS (tested versions).
+### Without Docker (Windows PowerShell)
 
-In PowerShell, from the repository root, start the backend:
+The local setup was tested with Python 3.11 and Node.js 24 LTS. Open two PowerShell terminals at the repository root.
+
+In the first terminal, create the Python environment and start the backend.
 
 ```powershell
 cd backend
@@ -25,7 +31,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --reload
 ```
 
-From the root in another terminal, start the frontend:
+Leave the backend running. In the second terminal, install the frontend dependencies and start Vite.
 
 ```powershell
 cd frontend
@@ -33,9 +39,13 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:5173 for the app or http://127.0.0.1:8000/docs for the API. A fresh database starts empty. Add movies in Movies and cinemas in Booking, then use Rewatch Plan or request a booking quote. Vite forwards local /api requests to FastAPI.
+Open http://localhost:5173 for the app. The API docs are at http://127.0.0.1:8000/docs. Vite forwards `/api` requests to the local backend.
 
-From backend, run `.\.venv\Scripts\python.exe -m pytest`. From frontend, run `npm run build`.
+### First run and checks
+
+A fresh database is empty. Add movies in Movies and cinemas in Booking before trying a rewatch plan or a booking quote.
+
+To run the backend tests, enter the `backend` folder and run `.\.venv\Scripts\python.exe -m pytest`. To check the frontend build, enter the `frontend` folder and run `npm run build`.
 
 ## Try the app
 
