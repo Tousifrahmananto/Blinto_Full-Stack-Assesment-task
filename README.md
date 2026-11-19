@@ -102,7 +102,7 @@ Use the interactive docs to create or edit movies and request a rewatch order.
 
 Titles are trimmed and compared case-sensitively. Release years are four-digit integers and runtimes range from 1 to 300 minutes. Prerequisites must be existing movies. Repeated prerequisite IDs collapse to a single link. A cycle returns HTTP 409 with code CIRCULAR_DEPENDENCY and leaves the database unchanged.
 
-The service follows prerequisite links using iterative depth-first search. Each movie is appended after its prerequisites. A movie already on the active path signals a cycle, while a completed movie has already been counted. The traversal takes O(V + E) time for the reachable graph and O(V) extra space. SQLite serializes the validation and write so concurrent requests cannot jointly introduce a cycle.
+The service follows prerequisite links using iterative depth-first search. Each movie is appended after its prerequisites. A movie already on the active path signals a cycle, while a completed movie has already been counted. The traversal takes O(V + E) time for the reachable graph. Its stack can hold O(V + E) entries because a shared prerequisite can be queued by multiple movies. SQLite serializes the validation and write so concurrent requests cannot jointly introduce a cycle.
 
 ## Cinema and booking API
 
@@ -118,4 +118,4 @@ The quote algorithm computes the best count for each seat total and records the 
 
 ## AI assistance
 
-I used Codex to plan the project, scaffold and implement the React frontend and FastAPI backend.
+I wrote the final implementations of both core algorithms myself. These are the movie prerequisite traversal and the minimum-bundle booking calculation. I used Codex to study earlier drafts and for help with planning, the React and FastAPI code, testing, deployment checks, and documentation.
