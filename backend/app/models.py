@@ -1,5 +1,5 @@
 from sqlalchemy import CheckConstraint, ForeignKey, String, false
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
@@ -22,3 +22,19 @@ class MoviePrerequisite(Base):
 
     movie_id: Mapped[int] = mapped_column(ForeignKey("movies.id"), primary_key=True)
     prerequisite_id: Mapped[int] = mapped_column(ForeignKey("movies.id"), primary_key=True)
+
+
+class Cinema(Base):
+    __tablename__ = "cinemas"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String, unique=True)
+    bundles: Mapped[list["CinemaBundleSize"]] = relationship(order_by="CinemaBundleSize.size")
+
+
+class CinemaBundleSize(Base):
+    __tablename__ = "cinema_bundle_sizes"
+    __table_args__ = (CheckConstraint("size BETWEEN 1 AND 500"),)
+
+    cinema_id: Mapped[int] = mapped_column(ForeignKey("cinemas.id"), primary_key=True)
+    size: Mapped[int] = mapped_column(primary_key=True)

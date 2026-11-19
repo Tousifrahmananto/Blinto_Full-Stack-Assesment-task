@@ -53,3 +53,36 @@ class RewatchPlan(BaseModel):
     movies: list[MovieSummary]
     watched_count: int
     remaining_runtime_minutes: int
+
+
+BundleSize = Annotated[int, Field(strict=True, ge=1, le=500)]
+
+
+class CinemaCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    name: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+    bundle_sizes: Annotated[list[BundleSize], Field(min_length=1, max_length=10)]
+
+    @model_validator(mode="after")
+    def reject_duplicate_sizes(self):
+        if len(set(self.bundle_sizes)) != len(self.bundle_sizes):
+            raise ValueError("Bundle sizes must be distinct.")
+        return self
+
+
+class CinemaDetails(BaseModel):
+    id: int
+    name: str
+    bundle_sizes: list[int]
+
+
+class BundleQuantity(BaseModel):
+    size: int
+    quantity: int
+
+
+class BookingQuote(BaseModel):
+    possible: bool
+    bundle_count: int | None
+    bundles: list[BundleQuantity]
