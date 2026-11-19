@@ -62,43 +62,28 @@ export default function Booking() {
     <>
       <div className="page-heading"><h1>Booking</h1><p>Find the fewest seat bundles that fit your watch party exactly.</p></div>
       {cinemas === null ? <CatalogStatus error={error} retry={retry} label="cinemas" /> : (
-        <div className="layout">
-          <div className="stack">
-            <section className="panel" aria-labelledby="quote-form-heading">
-              <h2 id="quote-form-heading">Get a quote</h2>
-              {cinemas.length === 0 ? <p className="muted">Add a cinema below to get started.</p> :
-                <form onSubmit={submitQuote}>
-                  <fieldset disabled={busy || saving}>
-                    <div className="field"><label htmlFor="cinema">Cinema</label><select id="cinema" value={cinemaId} required onChange={event => {
-                      setCinemaId(event.target.value)
-                      clearResult()
-                    }}>
-                      <option value="">Select a cinema</option>
-                      {cinemas.map(cinema => <option value={cinema.id} key={cinema.id}>{cinema.name}</option>)}
-                    </select></div>
-                    {selected && <p className="muted">Bundle sizes: {selected.bundle_sizes.join(', ')} seats</p>}
-                    <label>Group size<input type="number" min="1" max="10000" required value={groupSize}
-                      onChange={event => { setGroupSize(event.target.value); clearResult() }} /></label>
-                    <button className="primary" disabled={!cinemaId || !groupSize}>{busy ? 'Calculating…' : 'Calculate bundles'}</button>
-                  </fieldset>
-                </form>}
-              {quoteError && <p className="message error" role="alert">{quoteError}</p>}
-            </section>
-            <details className="panel" open={cinemas.length === 0 ? true : undefined}>
-              <summary>Add a cinema</summary>
-              <form onSubmit={submitCinema}>
-                <fieldset disabled={saving || busy}>
-                  <label>Cinema name<input name="name" required /></label>
-                  <label>Bundle sizes<input name="sizes" placeholder="1, 3, 4" required aria-describedby="bundle-hint" /></label>
-                  <p className="muted" id="bundle-hint">Enter 1–10 different sizes, separated by commas.</p>
-                  {cinemaError && <p className="message error" role="alert">{cinemaError}</p>}
-                  <button className="primary">{saving ? 'Adding…' : 'Add cinema'}</button>
+        <div className="layout booking-layout">
+          <section className="panel" aria-labelledby="quote-form-heading">
+            <h2 id="quote-form-heading">Get a quote</h2>
+            {cinemas.length === 0 ? <p className="muted">Add a cinema below to get started.</p> :
+              <form onSubmit={submitQuote}>
+                <fieldset disabled={busy || saving}>
+                  <div className="field"><label htmlFor="cinema">Cinema</label><select id="cinema" value={cinemaId} required onChange={event => {
+                    setCinemaId(event.target.value)
+                    clearResult()
+                  }}>
+                    <option value="">Select a cinema</option>
+                    {cinemas.map(cinema => <option value={cinema.id} key={cinema.id}>{cinema.name}</option>)}
+                  </select></div>
+                  {selected && <p className="muted">Bundle sizes: {selected.bundle_sizes.join(', ')} seats</p>}
+                  <label>Group size<input type="number" min="1" max="10000" required value={groupSize}
+                    onChange={event => { setGroupSize(event.target.value); clearResult() }} /></label>
+                  <button className="primary" disabled={!cinemaId || !groupSize}>{busy ? 'Calculating…' : 'Calculate bundles'}</button>
                 </fieldset>
-              </form>
-              {added && <p className="notice" role="status">{added}</p>}
-            </details>
-          </div>
-          <section aria-labelledby="result-heading">
+              </form>}
+            {quoteError && <p className="message error" role="alert">{quoteError}</p>}
+          </section>
+          <section className="booking-result" aria-labelledby="result-heading">
             <div className="section-heading"><h2 id="result-heading">Quote result</h2></div>
             {busy ? <p className="empty" role="status">Calculating bundles…</p> : !quote ? (
               <p className="empty">Enter a group size to see your quote.</p>
@@ -116,6 +101,19 @@ export default function Booking() {
               </>
             )}
           </section>
+          <details className="panel" open={cinemas.length === 0 ? true : undefined}>
+            <summary>Add a cinema</summary>
+            <form onSubmit={submitCinema}>
+              <fieldset disabled={saving || busy}>
+                <label>Cinema name<input name="name" required /></label>
+                <label>Bundle sizes<input name="sizes" placeholder="1, 3, 4" required aria-describedby="bundle-hint" /></label>
+                <p className="muted" id="bundle-hint">Enter 1–10 different sizes, separated by commas.</p>
+                {cinemaError && <p className="message error" role="alert">{cinemaError}</p>}
+                <button className="primary">{saving ? 'Adding…' : 'Add cinema'}</button>
+              </fieldset>
+            </form>
+            {added && <p className="notice" role="status">{added}</p>}
+          </details>
         </div>
       )}
     </>

@@ -11,6 +11,16 @@ const currentView = () => {
   return Object.hasOwn(views, key) ? key : 'movies'
 }
 
+function Mark() {
+  return (
+    <svg className="mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <circle className="mark-ring" cx="16" cy="16" r="13" />
+      <path className="mark-ticks" d="M16 1.5v5M16 25.5v5M1.5 16h5M25.5 16h5" />
+      <circle className="mark-core" cx="16" cy="16" r="5" />
+    </svg>
+  )
+}
+
 function App() {
   const [active, setActive] = useState(currentView)
 
@@ -25,7 +35,7 @@ function App() {
     <>
       <header className="site-header">
         <div className="shell header-inner">
-          <a className="brand" href="#movies">Doomsday <span>Ready</span></a>
+          <a className="brand" href="#movies"><Mark />Doomsday <span>Ready</span></a>
           <nav aria-label="Main navigation">
             {Object.entries(views).map(([key, [label]]) => (
               <a key={key} href={'#' + key} aria-current={active === key ? 'page' : undefined}>{label}</a>
@@ -34,6 +44,9 @@ function App() {
         </div>
       </header>
       <main className="shell"><View /></main>
+      <footer className="shell site-footer">
+        <p>Fan-made assessment project. No affiliation with Marvel or Disney.</p>
+      </footer>
     </>
   )
 }
