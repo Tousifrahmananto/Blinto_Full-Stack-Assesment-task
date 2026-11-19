@@ -115,3 +115,7 @@ The service follows prerequisite links using iterative depth-first search. Each 
 Cinema names are trimmed and compared case-sensitively. Each cinema offers 1–10 distinct integer sizes in the range 1–500. Group size ranges from 1 to 10,000. Bundle sizes can be reused in a quote. An impossible fit returns HTTP 200 with possible=false, bundle_count=null, and an empty bundles array.
 
 The quote algorithm computes the best count for each seat total and records the bundle used to reach it. It checks larger sizes first and keeps the first choice when counts tie. For group size G and K bundle sizes, the dynamic programming takes O(G × K) time and O(G) space.
+
+## AI assistance
+
+I used Codex to plan the project, scaffold and implement the React frontend and FastAPI backend, and draft the two core algorithms: iterative depth-first search for rewatch planning and dynamic programming for minimum-bundle quotes. Codex also wrote and ran the automated tests, checked the app in Edge, verified Docker Compose and SQLite persistence, and helped draft the documentation and diagrams.
