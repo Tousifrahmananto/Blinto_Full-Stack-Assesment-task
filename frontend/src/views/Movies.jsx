@@ -68,14 +68,14 @@ export default function Movies() {
   const busy = saving || toggling !== null
   return (
     <>
-      <div className="page-heading"><h1>Movies</h1><p>Build your MCU watchlist and set what comes first.</p></div>
+      <div className="page-heading"><h1>Movies</h1><p>Build your MCU watchlist and set what comes first</p></div>
       {movies === null ? <CatalogStatus error={error} retry={retry} label="movies" /> : (
         <div className="layout movies-layout">
           <section aria-labelledby="watchlist-title">
             <div className="section-heading"><h2 id="watchlist-title">Watchlist</h2><span>{movies.length} {movies.length === 1 ? 'movie' : 'movies'}</span></div>
             {listError && <p role="alert" className="message error">{listError}</p>}
             {movies.length === 0 ? <p className="empty">Your watchlist is empty. Add a movie to get started.</p> : (
-              <ul className="records">
+              <ul className="records film-strip" role="list">
                 {movies.map(movie => (
                   <li className="record movie-record" key={movie.id}>
                     <div className="record-copy">

@@ -35,7 +35,7 @@ function App() {
     <>
       <header className="site-header">
         <div className="shell header-inner">
-          <a className="brand" href="#movies"><Mark />Doomsday <span>Ready</span></a>
+          <a className="brand" href="#movies"><Mark /><span className="brand-name">Doomsday Ready</span></a>
           <nav aria-label="Main navigation">
             {Object.entries(views).map(([key, [label]]) => (
               <a key={key} href={'#' + key} aria-current={active === key ? 'page' : undefined}>{label}</a>

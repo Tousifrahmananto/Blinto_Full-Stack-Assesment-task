@@ -60,7 +60,7 @@ export default function Booking() {
 
   return (
     <>
-      <div className="page-heading"><h1>Booking</h1><p>Find the fewest seat bundles that fit your watch party exactly.</p></div>
+      <div className="page-heading"><h1>Booking</h1><p>Find the fewest seat bundles that fit your watch party exactly</p></div>
       {cinemas === null ? <CatalogStatus error={error} retry={retry} label="cinemas" /> : (
         <div className="layout booking-layout">
           <section className="panel" aria-labelledby="quote-form-heading">
@@ -90,15 +90,19 @@ export default function Booking() {
             ) : !quote.possible ? (
               <div className="empty" role="status"><strong>Not possible</strong><p>These bundles can’t seat {groupSize} people exactly. Try a different group size or cinema.</p></div>
             ) : (
-              <>
-                <div className="progress-summary" role="status"><div>
-                  <strong>{quote.bundle_count} {quote.bundle_count === 1 ? 'bundle' : 'bundles'}</strong><span>{groupSize} seats total</span>
-                </div></div>
-                <ul className="records">{quote.bundles.map(bundle => (
+              <div className="booking-ticket">
+                <div className="ticket-header" role="status">
+                  <p className="ticket-cinema">{selected?.name}</p>
+                  <div className="ticket-total">
+                    <strong>{quote.bundle_count} {quote.bundle_count === 1 ? 'bundle' : 'bundles'}</strong>
+                    <span>{groupSize} seats total</span>
+                  </div>
+                </div>
+                <ul className="records" role="list">{quote.bundles.map(bundle => (
                   <li className="record" key={bundle.size}><strong>{bundle.size}-seat bundle</strong>
                     <span>Quantity {bundle.quantity}</span></li>
                 ))}</ul>
-              </>
+              </div>
             )}
           </section>
           <details className="panel" open={cinemas.length === 0 ? true : undefined}>

@@ -25,7 +25,7 @@ export default function RewatchPlan() {
 
   return (
     <>
-      <div className="page-heading"><h1>Rewatch Plan</h1><p>Choose a target movie to see what to watch, in order.</p></div>
+      <div className="page-heading"><h1>Rewatch Plan</h1><p>See what to watch before your target movie</p></div>
       {movies === null ? <CatalogStatus error={error} retry={retry} label="movies" /> :
         movies.length === 0 ? <p className="empty">Your watchlist is empty. <a href="#movies">Add a movie</a> to make a plan.</p> : (
           <div className="layout">
@@ -57,9 +57,9 @@ export default function RewatchPlan() {
                     {plan.movies.length > 0 && <progress aria-label="Movies watched" value={plan.watched_count} max={plan.movies.length} />}
                   </div>
                   {plan.movies.length === 0 ? <p className="empty">This movie has no prerequisites.</p> : (
-                    <ol className="records ordered">{plan.movies.map((movie, index) => (
+                    <ol className="records ordered" role="list">{plan.movies.map((movie, index) => (
                       <li className="record" key={movie.id}>
-                        <span className="order" aria-hidden="true">{index + 1}</span>
+                        <span className="frame-number order" aria-hidden="true">{index + 1}</span>
                         <div className="record-copy"><strong>{movie.title}</strong><small>{movie.release_year} · {movie.runtime_minutes} min</small></div>
                         <span className={movie.watched ? 'watched' : 'muted'}>{movie.watched ? 'Watched' : 'Unwatched'}</span>
                       </li>
